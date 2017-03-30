@@ -1,14 +1,13 @@
 
 public class State {
-	public int x, y;
+	public StateType type;
 	public int stateSize;
 	public double[] rewards;
 	public double[] actionList;
 	
-	public State(int x,int y, int sSize, int aSize)
+	public State(StateType t, int sSize, int aSize)
 	{
-		this.x = x;
-		this.y = y;
+		this.type = t;
 		this.stateSize = sSize;
 		this.rewards = new double[aSize];
 	}

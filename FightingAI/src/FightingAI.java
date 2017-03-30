@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
 
+import commandcenter.CommandCenter;
 import structs.FrameData;
 import structs.GameData;
 import structs.Key;
@@ -25,9 +26,11 @@ public class FightingAI implements AIInterface {
 	private Key inputKey;
 	private boolean player;
 	private FrameData frameData;
-	
+	private CommandCenter cc;
 	private int myScore;
 	private int opponentScore;
+	
+	private ReinforcementLearning RL;
 	
 	File file;
 	PrintWriter pw;
@@ -39,14 +42,20 @@ public class FightingAI implements AIInterface {
 	
 	@Override
 	public int initialize(GameData gameData, boolean playerNumber) {
+		RL = new ReinforcementLearning(15);
 		
 		player = playerNumber;
 		inputKey = new Key();
 		frameData = new FrameData();
+		cc = new CommandCenter();
 		
 		myScore = 0;
 		opponentScore = 0;
-
+		
+		//init qtable
+		
+		
+		//init reward table
 		rnd = new Random();	
 		
 		file = new File("data/aiData/Switch/signal.txt");
@@ -66,35 +75,48 @@ public class FightingAI implements AIInterface {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+    public boolean canProcessing() {
+	    return !frameData.getEmptyFlag() && frameData.getRemainingTimeMilliseconds() > 0;
+	  }
+  
 	@Override
 	public void getInformation(FrameData frameData) {
 		// TODO Auto-generated method stub
 		// calculates and saves scores
-		if(frameData.getRemainingTime()<0 && this.frameData.getRemainingTime()>=0){
+
+/*		if(frameData.getRemainingTimeMilliseconds()>=0 ){
 			
 			System.out.println("P1:" + this.frameData.getP1().getHp());
 			System.out.println("P2:" + this.frameData.getP2().getHp());
 			myScore += calculateMyScore(this.frameData.getP1().getHp(),this.frameData.getP2().getHp(),player);
 			opponentScore += calculateOpponentScore(this.frameData.getP1().getHp(),this.frameData.getP2().getHp(),player);
 		}
-
+*/
 		this.frameData = frameData;
-		
+		cc.setFrameData(this.frameData, player); 
+
 	}
 
 	@Override
 	public void processing() {
+		RL.printQ();
 		// TODO Auto-generated method stub
+		if(canProcessing())
+		{
+			System.out.println(" dist: " + cc.getDistanceX());
+			System.out.println(" my hp: " + cc.getMyHP());
 
-		if(!frameData.getEmptyFlag()){
-			if(frameData.getRemainingTime()>0){
-				if(switchFlag){
-					randomProcessing();
-				}
-				else{
-					copyProcessing();
-				}
+			if (cc.getSkillFlag())
+			{
+				inputKey = cc.getSkillKey();
+			}
+			else 
+			{
+				inputKey.empty();
+				cc.skillCancel();
+				cc.commandCall("2 3 6 _ A");
+				
 			}
 		}
 		
@@ -180,27 +202,37 @@ public class FightingAI implements AIInterface {
 	}
 	
 	private void randomProcessing(){
+		
+
+		System.out.println("Dist to enemy " + cc.getDistanceX());
+		if (cc.getDistanceX() < 100){
+			cc.commandCall("2 3 6 _ B");
+
+		}
 	
-		// every key is set randomly.
+		/*
 		inputKey.A = (rnd.nextInt(10) > 4) ? true : false;
 		inputKey.B = (rnd.nextInt(10) > 4) ? true : false;
 		inputKey.C = (rnd.nextInt(10) > 4) ? true : false;
 		inputKey.U = (rnd.nextInt(10) > 4) ? true : false;
 		inputKey.D = (rnd.nextInt(10) > 4) ? true : false;
 		inputKey.L = (rnd.nextInt(10) > 4) ? true : false;
-		inputKey.R = (rnd.nextInt(10) > 4) ? true : false;
+		inputKey.R = (rnd.nextInt(10) > 4) ? true : false;*/
+	//	for (Action a: Action.)
 	}
 	
-	private void copyProcessing(){
+/*	private void copyProcessing(){
 		if(!frameData.getEmptyFlag()){
 			if(frameData.getRemainingTime()>0){
 				// gets the opponent's Key.
+				
 				inputKey = frameData.getKeyData().getOpponentKey(player);
+				
 				inputKey.R = inputKey.R ? false : true;
 				inputKey.L = inputKey.L ? false : true;
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public String getCharacter() {
