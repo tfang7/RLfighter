@@ -49,7 +49,7 @@ public class FightingAI implements AIInterface {
 		//int aSize = actionAir.length + actionGround.length;
 		
         RL = new ReinforcementLearning();
-
+        rnd = new Random();
 
         
         
@@ -123,7 +123,16 @@ public class FightingAI implements AIInterface {
 			{
 				inputKey.empty();
 				cc.skillCancel();
-				cc.commandCall(Action.STAND_D_DF_FA.name());
+				structs.CharacterData character =  cc.getMyCharacter();
+				int StateIndex = character.getState().ordinal();
+				int r = rnd.nextInt(RL.actions.length);
+				if (RL.qTable[StateIndex][r] < 0 && (r > 0 && r > RL.actions.length)){
+					r = rnd.nextInt();
+				}
+				//System.out.println(RL.actions.length);
+				Action next = RL.actions[r];
+				System.out.println(character.getState() + " " + RL.actions[r].name());
+				cc.commandCall(next.name());
 				
 			}
 		}

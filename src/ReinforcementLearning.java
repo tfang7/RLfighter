@@ -8,11 +8,11 @@ public class ReinforcementLearning {
 	public Action[] actions;
 	public RLState[] states;
 	
-	
 	private Action[] actionAir;
 	private Action[] actionGround;
 	
-	public static void main(){
+	public static void main()
+	{
 		
 	}
 	//main RL class
@@ -24,7 +24,7 @@ public class ReinforcementLearning {
 		setActions();
 		qTable = new double[this.stateSize][this.actionSize];		
 		initQ(qTable);
-		printQ();
+		//printQ();
 	}
 	
 	public void printQ(){
@@ -58,7 +58,7 @@ public class ReinforcementLearning {
 		int gLength = actionGround.length;
 		int totalLength = aLength + gLength;
 		this.actionSize = totalLength;
-		System.out.println("A Length: " + aLength + "," + "G length" + gLength + ", total" + totalLength);
+		//System.out.println("A Length: " + aLength + "," + "G length" + gLength + ", total" + totalLength);
         actions = new Action[aLength + gLength];
         //compile action list;
         for (int i = 0; i < aLength; i++)
@@ -78,11 +78,10 @@ public class ReinforcementLearning {
          */
     	states = new RLState[stateSize];
     	
-
-    	for (int i = 0; i < stateSize; i++){
-    			
+    	for (int i = 0; i < stateSize; i++)
+    	{
 			states[i] = new RLState(enumerate.State.values()[i], this.stateSize, this.actionSize);
-			System.out.println("i " + i + ":" + enumerate.State.values()[i]);
+			//System.out.println("i " + i + ":" + enumerate.State.values()[i]);
     	}
 		
 	}
