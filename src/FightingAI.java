@@ -43,8 +43,6 @@ public class FightingAI implements AIInterface {
 	@Override
 	public int initialize(GameData gameData, boolean playerNumber) {
 
-		
-        
         int sSize = enumerate.State.values().length;
 		//int aSize = actionAir.length + actionGround.length;
 		
@@ -114,7 +112,6 @@ public class FightingAI implements AIInterface {
 		if(canProcessing())
 		{
 			//getCurrentState(this.frameData);
-			
 			if (cc.getSkillFlag())
 			{
 				inputKey = cc.getSkillKey();
@@ -126,17 +123,26 @@ public class FightingAI implements AIInterface {
 				structs.CharacterData character =  cc.getMyCharacter();
 				int StateIndex = character.getState().ordinal();
 				int r = rnd.nextInt(RL.actions.length);
-				if (RL.qTable[StateIndex][r] < 0 && (r > 0 && r > RL.actions.length)){
+				
+				
+				while (RL.qTable[StateIndex][r] < 0 
+					   && (r < 0 && r > RL.actions.length) 
+					   && (character.energy + RL.energyCosts[r] < 0))
+				{
 					r = rnd.nextInt();
 				}
 				//System.out.println(RL.actions.length);
 				Action next = RL.actions[r];
-				System.out.println(character.getState() + " " + RL.actions[r].name());
+				
+/*				System.out.println("Energy cost: "+ 
+				(character.energy + RL.energyCosts[r]) + "<"+
+				(character.energy + RL.energyCosts[r] >= 0));
+				
+*/				//System.out.println(character.getState() + " " + RL.actions[r].name());
 				cc.commandCall(next.name());
 				
 			}
 		}
-		
 	}
 
 	@Override
@@ -168,13 +174,14 @@ public class FightingAI implements AIInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 	
-	private int calculateMyScore(int p1Hp,int p2Hp,boolean playerNumber){
+	private int calculateMyScore(int p1Hp,int p2Hp,boolean playerNumber)
+	{
 		int score = 0;
 		
-		if(playerNumber){
+		if(playerNumber)
+		{
 			if(p2Hp != 0 || p1Hp != 0)
 			{
 				score = 100 * p2Hp / (p1Hp + p2Hp);
@@ -183,7 +190,8 @@ public class FightingAI implements AIInterface {
 				score = 500;
 			}
 		}
-		else{
+		else
+		{
 			if(p2Hp != 0 || p1Hp != 0)
 			{
 				score = 100 * p1Hp / (p1Hp + p2Hp);
@@ -243,39 +251,6 @@ public class FightingAI implements AIInterface {
 		return score;
 	}
 	
-	private void randomProcessing(){
-		
-
-		System.out.println("Dist to enemy " + cc.getDistanceX());
-		if (cc.getDistanceX() < 100){
-			cc.commandCall("2 3 6 _ B");
-
-		}
-	
-		/*
-		inputKey.A = (rnd.nextInt(10) > 4) ? true : false;
-		inputKey.B = (rnd.nextInt(10) > 4) ? true : false;
-		inputKey.C = (rnd.nextInt(10) > 4) ? true : false;
-		inputKey.U = (rnd.nextInt(10) > 4) ? true : false;
-		inputKey.D = (rnd.nextInt(10) > 4) ? true : false;
-		inputKey.L = (rnd.nextInt(10) > 4) ? true : false;
-		inputKey.R = (rnd.nextInt(10) > 4) ? true : false;*/
-	//	for (Action a: Action.)
-	}
-	
-/*	private void copyProcessing(){
-		if(!frameData.getEmptyFlag()){
-			if(frameData.getRemainingTime()>0){
-				// gets the opponent's Key.
-				
-				inputKey = frameData.getKeyData().getOpponentKey(player);
-				
-				inputKey.R = inputKey.R ? false : true;
-				inputKey.L = inputKey.L ? false : true;
-			}
-		}
-	}*/
-
 	@Override
 	public String getCharacter() {
 		// TODO Auto-generated method stub
