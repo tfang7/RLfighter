@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.util.Random;
 
 import commandcenter.CommandCenter;
+import enumerate.Action;
+import enumerate.State;
 import structs.FrameData;
 import structs.GameData;
 import structs.Key;
@@ -29,6 +31,10 @@ public class FightingAI implements AIInterface {
 	private CommandCenter cc;
 	private int myScore;
 	private int opponentScore;
+	private RLState[] states;
+	private Action[] actionAir;
+	private Action[] actionGround;
+	private Action[] allActions;
 	
 	private ReinforcementLearning RL;
 	
@@ -42,8 +48,22 @@ public class FightingAI implements AIInterface {
 	
 	@Override
 	public int initialize(GameData gameData, boolean playerNumber) {
-		RL = new ReinforcementLearning(15);
+
 		
+        
+        int sSize = enumerate.State.values().length;
+		//int aSize = actionAir.length + actionGround.length;
+		
+        RL = new ReinforcementLearning();
+	//	states = new RLState[sSize];
+
+	/*	for (int i = 0; i < sSize; i++){
+			states[i] = new RLState(enumerate.State.values()[i], sSize, aSize);
+			//System.out.println("made a new state class for " + enumerate.State.values()[i]);
+		}*/
+
+        
+        
 		player = playerNumber;
 		inputKey = new Key();
 		frameData = new FrameData();
@@ -104,11 +124,8 @@ public class FightingAI implements AIInterface {
 		// TODO Auto-generated method stub
 		if(canProcessing())
 		{
-			getCurrentState(this.frameData);
+			//getCurrentState(this.frameData);
 			
-			System.out.println(" dist: " + cc.getDistanceX());
-			System.out.println(" my hp: " + cc.getMyHP());
-
 			if (cc.getSkillFlag())
 			{
 				inputKey = cc.getSkillKey();
@@ -117,7 +134,7 @@ public class FightingAI implements AIInterface {
 			{
 				inputKey.empty();
 				cc.skillCancel();
-				cc.commandCall("2 3 6 _ A");
+				cc.commandCall(Action.STAND_D_DF_FA.name());
 				
 			}
 		}
@@ -198,10 +215,10 @@ public class FightingAI implements AIInterface {
 			System.out.println("State: " + st);
 			
 		}*/
-		System.out.println("current state: " + s.toString());
+		//System.out.println("current state: " + s.toString());
 		//System.out.println("current hp: " + hp);
 		//System.out.println("current energy: " + energy);
-		System.out.println("current dist: " + dist);
+		//System.out.println("current dist: " + dist);
 		
 		//return out;
 	}
