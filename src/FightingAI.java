@@ -10,6 +10,7 @@ import java.util.Random;
 import commandcenter.CommandCenter;
 import enumerate.Action;
 import enumerate.State;
+import structs.CharacterData;
 import structs.FrameData;
 import structs.GameData;
 import structs.Key;
@@ -30,16 +31,24 @@ public class FightingAI implements AIInterface {
 	private FrameData frameData;
 	private CommandCenter cc;
 	private int myScore;
-	private int opponentScore;
-	private RLState[] states;
 	
+	private int opponentScore;
+	int stateIndex;
+	Action next;
+	boolean cost;
+	private RLState[] states;
+	private CharacterData character;
 	private ReinforcementLearning RL;
 	
+	private State lastState;
+	private Action lastAction;
 	File file;
 	PrintWriter pw;
 	BufferedReader br;
 	Random rnd;
-	
+	int r = -100;
+	//-n 10 --c1 ZEN --c2 ZEN --a1 FightingAI --a2 FightingAI --fastmode
+
 	@Override
 	public int initialize(GameData gameData, boolean playerNumber) {
 
@@ -99,7 +108,13 @@ public class FightingAI implements AIInterface {
 			myScore += calculateMyScore(this.frameData.getP1().getHp(),this.frameData.getP2().getHp(),player);
 			opponentScore += calculateOpponentScore(this.frameData.getP1().getHp(),this.frameData.getP2().getHp(),player);
 		}
-*/
+*/		
+		if (canProcessing())
+		{
+			character = cc.getMyCharacter();
+			stateIndex = character.getState().ordinal();
+		}
+
 		this.frameData = frameData;
 		cc.setFrameData(this.frameData, player); 
 
@@ -114,40 +129,40 @@ public class FightingAI implements AIInterface {
 			//getCurrentState(this.frameData);
 			if (cc.getSkillFlag())
 			{
+				//CHECK LAST ACTION HERE
 				inputKey = cc.getSkillKey();
+				//this is q
+				lastState = character.getState();
+				lastAction = character.getAction();
+				//System.out.println(character.getAction() + "<" + character.getLastCombo());
+				//System.out.println("Last action was" + lastAction + "<" + "LastState" + lastState);
 			}
 			else 
 			{
 				inputKey.empty();
 				cc.skillCancel();
-				structs.CharacterData character =  cc.getMyCharacter();
-				int StateIndex = character.getState().ordinal();
-				int r = rnd.nextInt(RL.actions.length);
+				
+				r = rnd.nextInt(RL.actions.length);
 				
 				
-				while (RL.qTable[StateIndex][r] < 0 
+				while (RL.qTable[stateIndex][r] < 0 
 					   && (r < 0 && r > RL.actions.length) 
-					   && (character.energy + RL.energyCosts[r] < 0))
+					   && character.energy + RL.energyCosts[r] < 0)
 				{
 					r = rnd.nextInt();
 				}
-				//System.out.println(RL.actions.length);
-				Action next = RL.actions[r];
-				
-/*				System.out.println("Energy cost: "+ 
-				(character.energy + RL.energyCosts[r]) + "<"+
-				(character.energy + RL.energyCosts[r] >= 0));
-				
-*/				//System.out.println(character.getState() + " " + RL.actions[r].name());
+				//this is q'
+				next = RL.actions[r];
+			/*	lastState = character.getState();
+				lastAction = character.getAction();*/
 				cc.commandCall(next.name());
-				
 			}
 		}
 	}
 
 	@Override
-	public Key input() {
-		// TODO Auto-generated method stub
+	public Key input()
+	{
 		return inputKey;
 	}
 
@@ -159,12 +174,6 @@ public class FightingAI implements AIInterface {
 			if(myScore < opponentScore){
 				System.out.println("lose");
 				pw = new PrintWriter(new BufferedWriter (new FileWriter(file)));
-	/*			if(switchFlag){
-					pw.println("0");
-				}
-				else{
-					pw.println("1");
-				}*/
 				pw.close();
 			}
 			else{

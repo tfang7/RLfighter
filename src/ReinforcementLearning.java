@@ -88,7 +88,8 @@ public class ReinforcementLearning {
 			//System.out.println("i " + i + ":" + enumerate.State.values()[i]);
     	}
 	}
-	public void initQ(double[][] table){
+	public void initQ(double[][] table)
+	{
 		for (int i = 0; i < this.stateSize; i++){
 			//this might be one off, too tired to check right now
 			for (int j = 0; j < this.actionSize; j++){
@@ -196,89 +197,88 @@ public class ReinforcementLearning {
 		
 		//Potential energy gain if hit, could be useful in reward function
 		energyGains = new double[] 
-		        {
-		    		//AIR GUARD
-		    		0,
-		    		//AIR_A
-		    		5,
-		    		//AIR_B
-		    		10, 
-		    		//AIR_DA
-		    		5, 
-		    		//AIR_DB
-		    		10,
-		    		//AIR_FA
-		    		5,
-		    		//AIR_FB
-		    		10, 
-		    		//AIR_UA
-		    		5,
-		    		//AIR_UB,
-		    		10,
-		    		//AIR_D_DF_FA
-		    		0,
-		    		//AIR_D_DF_FB
-		    		15,
-		    		//AIR_F_D_DFA
-		    		5,
-		    		//AIR_F_D_DFB
-		    		15,
-		    		//AIR_D_DB_BA
-		    		5,
-		    		//AIR_D_DB_BB
-		    		15,
-		    		//STAND_D_DB_BA
-		    		5,
-		    		//BACK_STEP
-		    		0,
-		    		//FORWARD_WALK
-		    		0,
-		    		//DASH
-		    		0,
-		    		//JUMP
-		    		0,
-		    		//FOR_JUMP
-		    		0,
-		    		//BACK_JUMP
-		    		0,
-		    		//STAND_GUARD
-		    		0,
-		    		//CROUCH_GUARD
-		    		0,
-		    		//THROW_A
-		    		2,
-		    		//THROW_B
-		    		10,
-		    		//STAND_A
-		    		2,
-		    		//STAND_B
-		    		5,
-		    		//CROUCH_A
-		    		3,
-		    		//CROUCH_B
-		    		5,
-		    		//STAND_FA
-		    		2,
-		    		//STAND_FB
-		    		10,
-		    		//CROUCH_FA
-		    		2,
-		    		//CROUCH_FB
-		    		5,
-		    		//STAND_D_DF_FA
-		    		3,
-		    		//STAND_D_DF_FB
-		    		5,
-		    		//STAND_F_D_DFA
-		    		5,
-		    		//STAND_F_D_DFB
-		    		15,
-		    		//STAND_D_DB_BB
-		    		15,
-		    		//STAND_D_DF_FC
-		    		30
-		        };
-		        
+	        {
+	    		//AIR GUARD
+	    		0,
+	    		//AIR_A
+	    		5,
+	    		//AIR_B
+	    		10, 
+	    		//AIR_DA
+	    		5, 
+	    		//AIR_DB
+	    		10,
+	    		//AIR_FA
+	    		5,
+	    		//AIR_FB
+	    		10, 
+	    		//AIR_UA
+	    		5,
+	    		//AIR_UB,
+	    		10,
+	    		//AIR_D_DF_FA
+	    		0,
+	    		//AIR_D_DF_FB
+	    		15,
+	    		//AIR_F_D_DFA
+	    		5,
+	    		//AIR_F_D_DFB
+	    		15,
+	    		//AIR_D_DB_BA
+	    		5,
+	    		//AIR_D_DB_BB
+	    		15,
+	    		//STAND_D_DB_BA
+	    		5,
+	    		//BACK_STEP
+	    		0,
+	    		//FORWARD_WALK
+	    		0,
+	    		//DASH
+	    		0,
+	    		//JUMP
+	    		0,
+	    		//FOR_JUMP
+	    		0,
+	    		//BACK_JUMP
+	    		0,
+	    		//STAND_GUARD
+	    		0,
+	    		//CROUCH_GUARD
+	    		0,
+	    		//THROW_A
+	    		2,
+	    		//THROW_B
+	    		10,
+	    		//STAND_A
+	    		2,
+	    		//STAND_B
+	    		5,
+	    		//CROUCH_A
+	    		3,
+	    		//CROUCH_B
+	    		5,
+	    		//STAND_FA
+	    		2,
+	    		//STAND_FB
+	    		10,
+	    		//CROUCH_FA
+	    		2,
+	    		//CROUCH_FB
+	    		5,
+	    		//STAND_D_DF_FA
+	    		3,
+	    		//STAND_D_DF_FB
+	    		5,
+	    		//STAND_F_D_DFA
+	    		5,
+	    		//STAND_F_D_DFB
+	    		15,
+	    		//STAND_D_DB_BB
+	    		15,
+	    		//STAND_D_DF_FC
+	    		30
+	        };
 	}
 	
 	
