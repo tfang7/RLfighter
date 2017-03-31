@@ -32,18 +32,12 @@ public class FightingAI implements AIInterface {
 	private int myScore;
 	private int opponentScore;
 	private RLState[] states;
-	private Action[] actionAir;
-	private Action[] actionGround;
-	private Action[] allActions;
 	
 	private ReinforcementLearning RL;
 	
 	File file;
 	PrintWriter pw;
 	BufferedReader br;
-	
-	private boolean switchFlag;
-	
 	Random rnd;
 	
 	@Override
@@ -55,12 +49,7 @@ public class FightingAI implements AIInterface {
 		//int aSize = actionAir.length + actionGround.length;
 		
         RL = new ReinforcementLearning();
-	//	states = new RLState[sSize];
 
-	/*	for (int i = 0; i < sSize; i++){
-			states[i] = new RLState(enumerate.State.values()[i], sSize, aSize);
-			//System.out.println("made a new state class for " + enumerate.State.values()[i]);
-		}*/
 
         
         
@@ -76,7 +65,7 @@ public class FightingAI implements AIInterface {
 		
 		
 		//init reward table
-		rnd = new Random();	
+/*		rnd = new Random();	
 		
 		file = new File("data/aiData/Switch/signal.txt");
 		
@@ -90,7 +79,7 @@ public class FightingAI implements AIInterface {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		// TODO Auto-generated method stub
 		return 0;
@@ -155,12 +144,12 @@ public class FightingAI implements AIInterface {
 			if(myScore < opponentScore){
 				System.out.println("lose");
 				pw = new PrintWriter(new BufferedWriter (new FileWriter(file)));
-				if(switchFlag){
+	/*			if(switchFlag){
 					pw.println("0");
 				}
 				else{
 					pw.println("1");
-				}
+				}*/
 				pw.close();
 			}
 			else{

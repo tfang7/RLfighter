@@ -1,9 +1,14 @@
 import enumerate.Action;
+import enumerate.State;
 
 public class ReinforcementLearning {
 	public double[][] qTable;
 	private int stateSize, actionSize;	
+	
 	public Action[] actions;
+	public RLState[] states;
+	
+	
 	private Action[] actionAir;
 	private Action[] actionGround;
 	
@@ -19,6 +24,7 @@ public class ReinforcementLearning {
 		setActions();
 		qTable = new double[this.stateSize][this.actionSize];		
 		initQ(qTable);
+		printQ();
 	}
 	
 	public void printQ(){
@@ -65,18 +71,36 @@ public class ReinforcementLearning {
         	actions[j] = actionGround[j - aLength];
         }
         
-        for (int k = 0; k < totalLength; k++)
+        /*  for (int k = 0; k < totalLength; k++)
         {
         	System.out.println(actions[k]);
         }
-        /* */
+         */
+    	states = new RLState[stateSize];
+    	
 
+    	for (int i = 0; i < stateSize; i++){
+    			
+			states[i] = new RLState(enumerate.State.values()[i], this.stateSize, this.actionSize);
+			System.out.println("i " + i + ":" + enumerate.State.values()[i]);
+    	}
 		
 	}
 	public void initQ(double[][] table){
 		for (int i = 0; i < this.stateSize; i++){
+			//this might be one off, too tired to check right now
 			for (int j = 0; j < this.actionSize; j++){
-				table[i][j] = 0.0d;
+				if (states[i].type != State.AIR && j < actionAir.length){
+					table[i][j] = -1.0d;
+				}
+				else if (states[i].type == State.AIR && j >= actionAir.length)
+				{
+					table[i][j] = -1.0d;
+				}
+				else
+				{
+					table[i][j] = 0.0d;
+				}
 			}
 		}
 	}
