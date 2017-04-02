@@ -21,23 +21,31 @@ public class ReinforcementLearning {
 	//todo: figure out states
 	//todo: figure out actions
 	public ReinforcementLearning(){
-		this.stateSize = enumerate.State.values().length;//StateType.values().length;
+		this.stateSize = State.values().length;//StateType.values().length;
 		//this.actionSize = aSize;
 		setActions();
 		qTable = new double[this.stateSize][this.actionSize];		
 		initQ(qTable);
-		//printQ();
+		printQ();
 	}
 	
 	public void printQ(){
 		if (this.qTable == null) return;
 		String finalTable = "";
-		for (int i = 0; i < this.stateSize; i++){
-			for (int j = 0; j < this.actionSize; j++){
+		String rewardTable = "";
+		for (int i = 0; i < this.stateSize; i++)
+		{
+			for (int j = 0; j < this.actionSize; j++)
+			{
 				finalTable += (" " + qTable[i][j]);
+				rewardTable += " " + states[i].rewards[j];
 			}
 			finalTable+=("\n");
+			rewardTable+=("\n");
 		}
+		System.out.println("rewards:");
+		System.out.println(rewardTable);
+		System.out.println("q table:");
 		System.out.println(finalTable);
 	}
 	
@@ -84,27 +92,37 @@ public class ReinforcementLearning {
     	
     	for (int i = 0; i < stateSize; i++)
     	{
-			states[i] = new RLState(enumerate.State.values()[i], this.stateSize, this.actionSize);
+			states[i] = new RLState(State.values()[i], this.stateSize, this.actionSize);
 			//System.out.println("i " + i + ":" + enumerate.State.values()[i]);
     	}
 	}
 	public void initQ(double[][] table)
 	{
-		for (int i = 0; i < this.stateSize; i++){
+		double v;
+		for (int i = 0; i < this.stateSize; i++)
+		{
 			//this might be one off, too tired to check right now
-			for (int j = 0; j < this.actionSize; j++){
+			for (int j = 0; j < this.actionSize; j++)
+			{
 				if (states[i].type != State.AIR && j < actionAir.length)
 				{
-					table[i][j] = -1.0d;
+					v = -1.0d;
 				}
 				else if (states[i].type == State.AIR && j >= actionAir.length)
 				{
-					table[i][j] = -1.0d;
+					v = -1.0d;
 				}
 				else
 				{
-					table[i][j] = 0.0d;
+					v = 0.0d;
 				}
+				table[i][j] = v;
+				states[i].rewards[j] = v;
+				
+				if (states[i].rewards[j] >= 0 && table[i][j] >= 0)
+					states[i].rewards[j] += energyGains[j];
+					if (energyGains[j] == 0 && states[i].rewards[j] >= 0) 
+						states[i].rewards[j]++;
 			}
 		}
 	}

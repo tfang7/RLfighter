@@ -1,9 +1,13 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.Random;
 
@@ -31,18 +35,23 @@ public class FightingAI implements AIInterface {
 	private FrameData frameData;
 	private CommandCenter cc;
 	private int myScore;
-	
 	private int opponentScore;
+	private int oldEnemyHealth;
+	
+	
+	double alpha, gamma;
+	
+	
 	int stateIndex;
 	Action next;
 	boolean cost;
-	private RLState[] states;
 	private CharacterData character;
 	private ReinforcementLearning RL;
 	
 	private State lastState;
-	private Action lastAction;
+	private int lastAction;
 	File file;
+	String fp;
 	PrintWriter pw;
 	BufferedReader br;
 	Random rnd;
@@ -52,13 +61,16 @@ public class FightingAI implements AIInterface {
 	@Override
 	public int initialize(GameData gameData, boolean playerNumber) {
 
-        int sSize = enumerate.State.values().length;
+        //int sSize = State.values().length;
 		//int aSize = actionAir.length + actionGround.length;
-		
+		oldEnemyHealth = -1;
+
         RL = new ReinforcementLearning();
         rnd = new Random();
 
         
+        alpha = 0.6d;
+        gamma = 0.5d;
         
 		player = playerNumber;
 		inputKey = new Key();
@@ -71,22 +83,35 @@ public class FightingAI implements AIInterface {
 		//init qtable
 		
 		
-		//init reward table
-/*		rnd = new Random();	
-		
-		file = new File("data/aiData/Switch/signal.txt");
-		
+		//check for qtable file
+		rnd = new Random();	
+		fp = "data/aiData/qData/tableData.txt";
+		file = new File(fp);
+		//This should try to copy the qtable from a file upon load
+		//otherwise create a new file
+		//at the end of each game, the file needs to be overwritten with the new tale.
 		try {
-			br = new BufferedReader(new FileReader(file));
-			String line = br.readLine();
-			System.out.println("signal:" + line);
-			if(line.equals("1"))switchFlag = true;
-			else switchFlag = false;
-			br.close();
+			if (file.exists()){
+				System.out.println("file exists");
+
+				br = new BufferedReader(new FileReader(file));
+				//	String line = br.readLine();
+				//	System.out.println("signal:" + line);
+				br.close();
+			}
+			else{
+				file.createNewFile();
+				System.out.println("created a new file");
+
+				
+				
+				
+			}
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		
 		// TODO Auto-generated method stub
 		return 0;
@@ -108,7 +133,12 @@ public class FightingAI implements AIInterface {
 			myScore += calculateMyScore(this.frameData.getP1().getHp(),this.frameData.getP2().getHp(),player);
 			opponentScore += calculateOpponentScore(this.frameData.getP1().getHp(),this.frameData.getP2().getHp(),player);
 		}
+		
 */		
+		System.out.println("remaining time" + frameData.getRemainingTimeMilliseconds() );
+		if (frameData.getRemainingTimeMilliseconds() <= 1000){
+			System.out.println("Round over");
+		}
 		if (canProcessing())
 		{
 			character = cc.getMyCharacter();
@@ -122,6 +152,7 @@ public class FightingAI implements AIInterface {
 
 	@Override
 	public void processing() {
+
 		//RL.printQ();
 		// TODO Auto-generated method stub
 		if(canProcessing())
@@ -133,9 +164,9 @@ public class FightingAI implements AIInterface {
 				inputKey = cc.getSkillKey();
 				//this is q
 				lastState = character.getState();
-				lastAction = character.getAction();
-				//System.out.println(character.getAction() + "<" + character.getLastCombo());
-				//System.out.println("Last action was" + lastAction + "<" + "LastState" + lastState);
+				if (r >= 0) lastAction = r;
+			//	System.out.println(character.getAction() + "<" + character.getLastCombo());
+			//	System.out.println("Last action was" + lastAction + "<" + "LastState" + lastState);
 			}
 			else 
 			{
@@ -143,7 +174,6 @@ public class FightingAI implements AIInterface {
 				cc.skillCancel();
 				
 				r = rnd.nextInt(RL.actions.length);
-				
 				
 				while (RL.qTable[stateIndex][r] < 0 
 					   && (r < 0 && r > RL.actions.length) 
@@ -153,8 +183,21 @@ public class FightingAI implements AIInterface {
 				}
 				//this is q'
 				next = RL.actions[r];
+				
 			/*	lastState = character.getState();
 				lastAction = character.getAction();*/
+				
+				if(oldEnemyHealth != - 1)
+				{
+					RL.states[stateIndex].rewards[r] -= cc.getEnemyHP() - oldEnemyHealth;
+				}
+				
+				oldEnemyHealth = cc.getEnemyHP();
+				if (lastState != null && lastAction >= 0)
+				{
+					double t = computeQ(lastState, character.getState(), lastAction, r);
+					//System.out.println("new q value: " + q );
+				}
 				cc.commandCall(next.name());
 			}
 		}
@@ -165,14 +208,49 @@ public class FightingAI implements AIInterface {
 	{
 		return inputKey;
 	}
-
+	//this function is not finished yet
+	public double computeQ(State sLast, State sNext, int aLast, int aNext )
+	{
+		//System.out.println("Total Length " + RL.actions.length  + "," + alpha + "; Gamma:" + gamma);
+		double q,qMax, qNext, rNext;	
+		
+		//Index out of range bug somewhere in this function, possible from reward function
+		
+		q = RL.qTable[sLast.ordinal()][aLast];
+		//System.out.println("(" + sLast.ordinal()+"," + aLast +")" + "q: " + q);
+		qMax = maxQ(sNext);
+	    qNext = RL.qTable[sNext.ordinal()][aNext];
+		//rNext = states[sNext.ordinal()].rewards[aNext];
+		
+	    //System.out.println("(" + sNext.ordinal()+"," + aNext +")" + "Qn: " + qNext );
+		return q + alpha * (qNext + gamma * qMax - q);
+	}
+	//For SARSA later
+	public int maxQ(State s)
+	{
+		double max = 0;
+		int bestIndex = 0;
+		for (int i = 0; i < RL.actions.length; i++)
+		{
+			if (RL.qTable[s.ordinal()][i] > max)
+			{
+				max = RL.qTable[s.ordinal()][i];
+				bestIndex = i;
+			}
+		}
+		return bestIndex;
+	}
 	public void close(){
 		try {
 			System.out.println("myScore:"+myScore);
 			System.out.println("opScore:"+opponentScore);
+			ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(fp));
+			outStream.writeObject(RL.qTable);
+			
 			
 			if(myScore < opponentScore){
 				System.out.println("lose");
+				
 				pw = new PrintWriter(new BufferedWriter (new FileWriter(file)));
 				pw.close();
 			}
@@ -184,7 +262,15 @@ public class FightingAI implements AIInterface {
 			e.printStackTrace();
 		}
 	}
-	
+	public int getActionIndex(Action a){
+		Action[] actList = RL.actions;
+		for (int i = 0; i < actList.length; i++)
+		{
+			if (actList[i] == a)
+				return i;
+		}
+		return 0;
+	}
 	private int calculateMyScore(int p1Hp,int p2Hp,boolean playerNumber)
 	{
 		int score = 0;
@@ -222,7 +308,7 @@ public class FightingAI implements AIInterface {
 		int energy = cc.getMyEnergy();
 		int dist = cc.getDistanceX();
 		
-		enumerate.State s = cc.getMyCharacter().getState();
+		State s = cc.getMyCharacter().getState();
 		
 		
 		
