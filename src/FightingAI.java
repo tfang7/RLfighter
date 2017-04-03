@@ -168,6 +168,16 @@ public class FightingAI implements AIInterface {
 			
 			roundNumber++;
 			System.out.println(roundNumber + " " + average);
+			try {
+				BufferedWriter chartDataOut = new BufferedWriter(new FileWriter("data/aiData/qData/chartData.txt", true));
+				chartDataOut.write(roundNumber + " " + average + '\n');
+				chartDataOut.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
 			roundStarted = false;
 			try(  PrintWriter out = new PrintWriter( fp )  ){
 			    out.println( RL.printQ() );
@@ -234,8 +244,8 @@ public class FightingAI implements AIInterface {
 			}
 		/*	lastState = character.getState();
 			lastAction = character.getAction();*/
-			
-	/*		if(oldEnemyHealth != - 1)
+/*			
+			if(oldEnemyHealth != - 1)
 			{
 				RL.states[stateIndex].rewards[r] -= cc.getEnemyHP() - oldEnemyHealth;
 			}
@@ -244,9 +254,8 @@ public class FightingAI implements AIInterface {
 			if (lastState != null && lastAction >= 0)
 			{
 				 //RL.states[stateIndex].rewards[r] + (gamma * maxQ(character.getState()));
-				double t = computeQ(lastState, character.getState(), lastAction, r);
+				double t = computeQ(lastState, State.values()[stateIndex], lastAction, r);
 				//System.out.println("new q value: " + t);
-				if (t < 0) t *= -1;
 				RL.qTable[stateIndex][r] = t;
 				//System.out.println("new q value: " + q );
 			}
