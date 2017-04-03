@@ -1,14 +1,9 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Scanner;
@@ -40,7 +35,9 @@ public class FightingAI implements AIInterface {
 	private int opponentScore;
 	private int oldEnemyHealth;
 	
+	
 	double alpha, gamma;
+	
 	
 	int stateIndex;
 	Action next;
@@ -63,21 +60,13 @@ public class FightingAI implements AIInterface {
 	@Override
 	public int initialize(GameData gameData, boolean playerNumber) {
 
-        //int sSize = State.values().length;
-		//int aSize = actionAir.length + actionGround.length;
 		oldEnemyHealth = -1;
-
         RL = new ReinforcementLearning();
-
-		//System.out.println("Scanning from file");
-     //   System.out.println(RL.printQ());
-        
-        
         rnd = new Random();
 
         roundStarted = false;
         alpha = 0.7d;
-        gamma = 0.6d;
+        gamma = 0.1d;
         
 		player = playerNumber;
 		inputKey = new Key();
@@ -87,10 +76,6 @@ public class FightingAI implements AIInterface {
 		myScore = 0;
 		opponentScore = 0;
 		
-		//init qtable
-		
-		
-		//check for qtable file
 		rnd = new Random();	
 		fp = "data/aiData/qData/tableData.txt";
 		file = new File(fp);
@@ -110,9 +95,6 @@ public class FightingAI implements AIInterface {
 				scan.close();
 
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -203,8 +185,77 @@ public class FightingAI implements AIInterface {
 		// TODO Auto-generated method stub
 		if(canProcessing())
 		{
-			qLearn();
+			SARSA();//qLearn();
 		}
+	}
+	public void SARSA(){
+		//getCurrentState(this.frameData);
+		if (cc.getSkillFlag())
+		{
+			//CHECK LAST ACTION HERE
+			inputKey = cc.getSkillKey();
+			//this is q
+			lastState = character.getState();
+			if (r >= 0) lastAction = r;
+		//	System.out.println(character.getAction() + "<" + character.getLastCombo());
+		//	System.out.println("Last action was" + lastAction + "<" + "LastState" + lastState);
+		}
+		else 
+		{
+			inputKey.empty();
+			cc.skillCancel();
+
+			//Pick an action based on current policy.
+			r = maxQ(State.values()[stateIndex]);
+			
+			
+
+
+		/*	lastState = character.getState();
+			lastAction = character.getAction();*/			
+			
+			oldEnemyHealth = cc.getEnemyHP();
+			if (lastState != null && lastAction >= 0)
+			{
+				if(oldEnemyHealth != - 1)
+				{
+					int diff = cc.getEnemyHP() - oldEnemyHealth;
+					
+					RL.states[stateIndex].rewards[lastAction] += Math.abs(diff)/10;
+				}
+				//encourage exploration
+				if (lastAction == r) {
+					r = rnd.nextInt(RL.actions.length);
+					
+					while (RL.qTable[stateIndex][r] < 0.0
+						   && (r < 0 && r > RL.actions.length) 
+						   && character.energy + RL.energyCosts[r] < 0)
+					{
+						r = rnd.nextInt();
+					}
+				}
+				 //RL.states[stateIndex].rewards[r] + (gamma * maxQ(character.getState()));
+				double t = sarsaQ(lastState, character.getState(), lastAction, r);
+				//System.out.println("new q value: " + t);
+				if (t < 0) t *= -1;
+				RL.qTable[stateIndex][r] = t;
+				//System.out.println("new q value: " + q );
+			}
+			if (r < RL.actionAir.length)
+			{
+				if (stateIndex != State.AIR.ordinal())
+					stateIndex = State.AIR.ordinal();
+			}
+			else
+			{
+				if (stateIndex == State.AIR.ordinal())
+					stateIndex = State.STAND.ordinal();
+			}
+			
+			next = RL.actions[r];
+			cc.commandCall(next.name());
+		}
+		
 	}
 	public void qLearn(){
 		//getCurrentState(this.frameData);
@@ -225,7 +276,7 @@ public class FightingAI implements AIInterface {
 			
 			r = rnd.nextInt(RL.actions.length);
 			
-			while (RL.qTable[stateIndex][r] < 0 
+			while (RL.states[stateIndex].rewards[r] < 0.0
 				   && (r < 0 && r > RL.actions.length) 
 				   && character.energy + RL.energyCosts[r] < 0)
 			{
@@ -242,16 +293,18 @@ public class FightingAI implements AIInterface {
 					stateIndex = State.STAND.ordinal();
 			}
 		/*	lastState = character.getState();
-			lastAction = character.getAction();*/
-/*			
-			if(oldEnemyHealth != - 1)
-			{
-				RL.states[stateIndex].rewards[r] -= cc.getEnemyHP() - oldEnemyHealth;
-			}
-			*/
+			lastAction = character.getAction();*/			
+
 			oldEnemyHealth = cc.getEnemyHP();
 			if (lastState != null && lastAction >= 0)
 			{
+				if(oldEnemyHealth != - 1)
+				{
+					int diff = cc.getEnemyHP() - oldEnemyHealth;
+					//diff = diff > 0 ? -1 : 1;
+					RL.states[stateIndex].rewards[lastAction] +=  Math.abs(diff);
+				}
+				
 				 //RL.states[stateIndex].rewards[r] + (gamma * maxQ(character.getState()));
 				double t = computeQ(lastState, State.values()[stateIndex], lastAction, r);
 				//System.out.println("new q value: " + t);
@@ -261,7 +314,6 @@ public class FightingAI implements AIInterface {
 			}
 			cc.commandCall(next.name());
 		}
-		
 	}
 	@Override
 	public Key input()
@@ -272,33 +324,44 @@ public class FightingAI implements AIInterface {
 	public double computeQ(State sLast, State sNext, int aLast, int aNext )
 	{
 		//System.out.println("Total Length " + RL.actions.length  + "," + alpha + "; Gamma:" + gamma);
-		double q,qMax, qNext,reward;	
-		
+		double q,qMax,reward;	
+		int nextIndex = sNext.ordinal();
 		//Index out of range bug somewhere in this function, possible from reward function
-		qMax = maxQ(sNext);
+		qMax = RL.qTable[nextIndex][maxQ(sNext)];
 		
 		q = RL.qTable[sLast.ordinal()][aLast];
-		reward = RL.qTable[sNext.ordinal()][aNext];
-		System.out.println("reward:" + reward);
-	    qNext = RL.qTable[sNext.ordinal()][aNext];
+		reward = RL.qTable[nextIndex][aNext];
+		//System.out.println("(" + sLast.ordinal()+"," + aLast +")" + "q: " + q);		
 		//rNext = states[sNext.ordinal()].rewards[aNext];
-		
+
 	    //System.out.println("(" + sNext.ordinal()+"," + aNext +")" + "Qn: " + qNext );
+		return q + alpha * (reward + gamma * qMax - q);
+	}
+	public double sarsaQ(State sLast, State sNext, int aLast, int aNext )
+	{
+		//System.out.println("Total Length " + RL.actions.length  + "," + alpha + "; Gamma:" + gamma);
+		double q, qNext,reward;	
+		int nextIndex = sNext.ordinal();
+		//Index out of range bug somewhere in this function, possible from reward function		
+		q = RL.qTable[sLast.ordinal()][aLast];
+		reward = RL.qTable[nextIndex][aNext];
+		//System.out.println("(" + sLast.ordinal()+"," + aLast +")" + "q: " + q);
+	    qNext = RL.qTable[nextIndex][aNext];
 		return q + alpha * (reward + gamma * qNext - q);
 	}
-	public double maxQ(State s)
+	public int maxQ(State s)
 	{
-		double max = 0;
+		double max = 0.0;
 		int bestIndex = 0;
 		for (int i = 0; i < RL.actions.length; i++)
 		{
-			if (RL.qTable[s.ordinal()][i] > max)
+			if (RL.qTable[s.ordinal()][i] >= max && RL.qTable[s.ordinal()][i] >= 0)
 			{
 				max = RL.qTable[s.ordinal()][i];
 				bestIndex = i;
 			}
 		}
-		return max;
+		return bestIndex;
 	}
 	public void close(){
 		try {
@@ -354,34 +417,8 @@ public class FightingAI implements AIInterface {
 		}
 		return score;
 	}
-	//FOR DEBUGGING
-	private void getCurrentState(FrameData frameData)
-	{
-		//StateType out = StateType.STANDING;
-		FrameData currentFrame = frameData;
-		if (currentFrame == null) currentFrame = this.frameData;
-		
-		int hp = cc.getMyHP();
-		int energy = cc.getMyEnergy();
-		int dist = cc.getDistanceX();
-		
-		State s = cc.getMyCharacter().getState();
-		
-		
-		
-		/*for (enumerate.State st : enumerate.State.values()){
-			System.out.println("State: " + st);
-			
-		}*/
-		//System.out.println("current state: " + s.toString());
-		//System.out.println("current hp: " + hp);
-		//System.out.println("current energy: " + energy);
-		//System.out.println("current dist: " + dist);
-		
-		//return out;
-	}
 
-	private int calculateOpponentScore(int p1Hp,int p2Hp,boolean playerNumber){
+	/*private int calculateOpponentScore(int p1Hp,int p2Hp,boolean playerNumber){
 		int score = 0;
 		if(playerNumber){
 			if(p2Hp != 0 || p1Hp != 0)
@@ -402,7 +439,7 @@ public class FightingAI implements AIInterface {
 			}
 		}
 		return score;
-	}
+	}*/
 	
 	@Override
 	public String getCharacter() {

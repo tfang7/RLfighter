@@ -48,12 +48,13 @@ public class ReinforcementLearning {
 			finalTable+=("\n");
 			rewardTable+=("\n");
 		}
-		return finalTable;
-/*		System.out.println("initialized rewards:");
+/*		
+		System.out.println("initialized rewards:");
 		System.out.println(rewardTable);
 		System.out.println("q table:");
 		System.out.println(finalTable);
-*/	}
+*/		return finalTable;
+	}
 	public double averageQ(){
 		double ret = 0;
 		int totalSize = (this.stateSize * this.actionSize);
@@ -147,7 +148,7 @@ public class ReinforcementLearning {
 				if (states[i].rewards[j] >= 0 && table[i][j] >= 0)
 					states[i].rewards[j] += energyGains[j]/10;
 					if (energyGains[j] == 0 && states[i].rewards[j] >= 0) 
-						states[i].rewards[j] += 0.1/10;
+						states[i].rewards[j] += 0.1;
 			}
 		}
 	}
