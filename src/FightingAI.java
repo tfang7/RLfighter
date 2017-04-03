@@ -40,9 +40,7 @@ public class FightingAI implements AIInterface {
 	private int opponentScore;
 	private int oldEnemyHealth;
 	
-	
 	double alpha, gamma;
-	
 	
 	int stateIndex;
 	Action next;
@@ -78,8 +76,8 @@ public class FightingAI implements AIInterface {
         rnd = new Random();
 
         roundStarted = false;
-        alpha = 0.6d;
-        gamma = 0.5d;
+        alpha = 0.7d;
+        gamma = 0.6d;
         
 		player = playerNumber;
 		inputKey = new Key();
@@ -168,9 +166,10 @@ public class FightingAI implements AIInterface {
 			
 			roundNumber++;
 			System.out.println(roundNumber + " " + average);
+			double score = calculateMyScore(cc.getMyHP(), cc.getEnemyHP(), player);
 			try {
 				BufferedWriter chartDataOut = new BufferedWriter(new FileWriter("data/aiData/qData/chartData.txt", true));
-				chartDataOut.write(roundNumber + " " + average + '\n');
+				chartDataOut.write(roundNumber + " " + average + " " + score + '\n');
 				chartDataOut.close();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -256,6 +255,7 @@ public class FightingAI implements AIInterface {
 				 //RL.states[stateIndex].rewards[r] + (gamma * maxQ(character.getState()));
 				double t = computeQ(lastState, State.values()[stateIndex], lastAction, r);
 				//System.out.println("new q value: " + t);
+				if (t < 0) t *= -1;
 				RL.qTable[stateIndex][r] = t;
 				//System.out.println("new q value: " + q );
 			}
@@ -279,12 +279,12 @@ public class FightingAI implements AIInterface {
 		
 		q = RL.qTable[sLast.ordinal()][aLast];
 		reward = RL.qTable[sNext.ordinal()][aNext];
-		//System.out.println("(" + sLast.ordinal()+"," + aLast +")" + "q: " + q);
+		System.out.println("reward:" + reward);
 	    qNext = RL.qTable[sNext.ordinal()][aNext];
 		//rNext = states[sNext.ordinal()].rewards[aNext];
 		
 	    //System.out.println("(" + sNext.ordinal()+"," + aNext +")" + "Qn: " + qNext );
-		return q + alpha * (reward + gamma * qMax - q);
+		return q + alpha * (reward + gamma * qNext - q);
 	}
 	public double maxQ(State s)
 	{
