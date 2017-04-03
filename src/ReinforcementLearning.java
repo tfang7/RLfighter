@@ -1,3 +1,8 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import enumerate.Action;
 import enumerate.State;
 
@@ -8,7 +13,7 @@ public class ReinforcementLearning {
 	public Action[] actions;
 	public RLState[] states;
 	
-	private Action[] actionAir;
+	public Action[] actionAir;
 	private Action[] actionGround;
 	public double[] energyCosts;
 	public double[] energyGains;
@@ -29,11 +34,11 @@ public class ReinforcementLearning {
 		printQ();
 	}
 	
-	public void printQ(){
-		if (this.qTable == null) return;
+	public String printQ(){
+		if (this.qTable == null) return "";
 		String finalTable = "";
 		String rewardTable = "";
-		for (int i = 0; i < this.stateSize; i++)
+		for (int i = 0; i < State.values().length; i++)
 		{
 			for (int j = 0; j < this.actionSize; j++)
 			{
@@ -43,12 +48,32 @@ public class ReinforcementLearning {
 			finalTable+=("\n");
 			rewardTable+=("\n");
 		}
-		System.out.println("rewards:");
+		return finalTable;
+/*		System.out.println("initialized rewards:");
 		System.out.println(rewardTable);
 		System.out.println("q table:");
 		System.out.println(finalTable);
+*/	}
+	public double averageQ(){
+		double ret = 0;
+		int totalSize = (this.stateSize * this.actionSize);
+		for (int i = 0; i < this.stateSize; i++ ){
+			for (int j = 0; j < this.actionSize; j++)
+			{
+				if (this.qTable[i][j] == -1)
+				{
+					totalSize--;
+				}
+				else{
+					ret += this.qTable[i][j];
+				}
+				
+			}
+		}
+		ret = ret / totalSize;
+		if (ret < 0) ret *= -1;
+		return ret;
 	}
-	
 	public void setActions()
 	{
 	    actionAir =
@@ -126,6 +151,7 @@ public class ReinforcementLearning {
 			}
 		}
 	}
+
 	
 	public void initEnergy()
 	{
