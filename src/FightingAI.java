@@ -195,7 +195,9 @@ public class FightingAI implements AIInterface {
 				oldEnemyHealth = cc.getEnemyHP();
 				if (lastState != null && lastAction >= 0)
 				{
-					double t = computeQ(lastState, character.getState(), lastAction, r);
+					double t = RL.states[stateIndex].rewards[r] + (gamma * maxQ(character.getState())); //computeQ(lastState, character.getState(), lastAction, r);
+					System.out.println("new q value: " + t);
+					RL.qTable[stateIndex][r] = t;
 					//System.out.println("new q value: " + q );
 				}
 				cc.commandCall(next.name());
@@ -212,7 +214,7 @@ public class FightingAI implements AIInterface {
 	public double computeQ(State sLast, State sNext, int aLast, int aNext )
 	{
 		//System.out.println("Total Length " + RL.actions.length  + "," + alpha + "; Gamma:" + gamma);
-		double q,qMax, qNext, rNext;	
+		double q,qMax, qNext;	
 		
 		//Index out of range bug somewhere in this function, possible from reward function
 		
