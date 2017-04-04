@@ -101,12 +101,7 @@ public class FightingAI implements AIInterface {
 
 		}
 		else{
-			//file.createNewFile();
 			System.out.println("created a new file");
-
-			
-			
-			
 		}
 		
 		// TODO Auto-generated method stub
@@ -135,29 +130,51 @@ public class FightingAI implements AIInterface {
 		if (frameData.getRemainingTimeMilliseconds() <= 1000){
 			System.out.println("Round over");
 		}*/
-		
+
 		if (roundStarted == false && frameData.getRemainingTimeMilliseconds() > 58000)
 		{
 			roundStarted = true;
 		}
 		if (roundStarted == true && frameData.getRemainingTimeMilliseconds() < 2000)
 		{
-			
+			myScore =  calculateMyScore(cc.getMyHP(), cc.getEnemyHP(), player);
+			opponentScore =  calculateOpponentScore(cc.getMyHP(), cc.getEnemyHP(), player);
+
 			//RL.printQ();
 			double average = RL.averageQ();
 			
 			roundNumber++;
 			System.out.println(roundNumber + " " + average);
 			double score = calculateMyScore(cc.getMyHP(), cc.getEnemyHP(), player);
-			try {
+/*			try {
 				BufferedWriter chartDataOut = new BufferedWriter(new FileWriter("data/aiData/qData/chartData.txt", true));
-				chartDataOut.write(roundNumber + " " + average + " " + score + '\n');
+				chartDataOut.write(roundNumber + " "  + score + '\n');
 				chartDataOut.close();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			}*/
+			try {
+				//System.out.println("myScore:"+myScore);
+				//System.out.println("opScore:"+opponentScore);
+				pw = new PrintWriter(new BufferedWriter (new FileWriter("data/aiData/qData/chartData.txt", true)));
+				String victory = "";
+
+				if(myScore < opponentScore){
+					victory = "loss";
+					
+				}
+				else{
+					victory = "win ";
+				}
+				victory += myScore + "\n";
+				pw.write(victory);
+				pw.close();
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
 			
 			roundStarted = false;
 			try(  PrintWriter out = new PrintWriter( fp )  ){
@@ -207,31 +224,38 @@ public class FightingAI implements AIInterface {
 
 			//Pick an action based on current policy.
 			r = maxQ(State.values()[stateIndex]);
-			
-			
-
 
 		/*	lastState = character.getState();
 			lastAction = character.getAction();*/			
-			
+	/*		if(oldEnemyHealth != - 1)
+			{
+				int diff = cc.getEnemyHP() - oldEnemyHealth;
+				
+				RL.states[stateIndex].rewards[lastAction] += Math.abs(diff)/10;
+			}*/
 			oldEnemyHealth = cc.getEnemyHP();
+
+			if (r == lastAction) r = rnd.nextInt(RL.actions.length);
+			if (r < RL.actionAir.length)
+			{
+				if (stateIndex != State.AIR.ordinal())
+					stateIndex = State.AIR.ordinal();
+			}
+			else if (r >= RL.actionAir.length)
+			{
+				if (stateIndex == State.AIR.ordinal())
+					stateIndex = State.STAND.ordinal();
+			}
+			//System.out.println(r + "," + lastAction);
 			if (lastState != null && lastAction >= 0)
 			{
-				if(oldEnemyHealth != - 1)
-				{
-					int diff = cc.getEnemyHP() - oldEnemyHealth;
-					
-					RL.states[stateIndex].rewards[lastAction] += Math.abs(diff)/10;
-				}
 				//encourage exploration
-				if (lastAction == r) {
-					r = rnd.nextInt(RL.actions.length);
-					
-					while (RL.qTable[stateIndex][r] < 0.0
+				if (lastAction == r) {	
+					while (RL.states[stateIndex].rewards[r] < 0.0
 						   && (r < 0 && r > RL.actions.length) 
 						   && character.energy + RL.energyCosts[r] < 0)
 					{
-						r = rnd.nextInt();
+						r = rnd.nextInt(RL.actions.length);
 					}
 				}
 				 //RL.states[stateIndex].rewards[r] + (gamma * maxQ(character.getState()));
@@ -241,17 +265,6 @@ public class FightingAI implements AIInterface {
 				RL.qTable[stateIndex][r] = t;
 				//System.out.println("new q value: " + q );
 			}
-			if (r < RL.actionAir.length)
-			{
-				if (stateIndex != State.AIR.ordinal())
-					stateIndex = State.AIR.ordinal();
-			}
-			else
-			{
-				if (stateIndex == State.AIR.ordinal())
-					stateIndex = State.STAND.ordinal();
-			}
-			
 			next = RL.actions[r];
 			cc.commandCall(next.name());
 		}
@@ -280,7 +293,7 @@ public class FightingAI implements AIInterface {
 				   && (r < 0 && r > RL.actions.length) 
 				   && character.energy + RL.energyCosts[r] < 0)
 			{
-				r = rnd.nextInt();
+				r = rnd.nextInt(RL.actions.length);
 			}
 			//this is q'
 			next = RL.actions[r];
@@ -355,7 +368,7 @@ public class FightingAI implements AIInterface {
 		int bestIndex = 0;
 		for (int i = 0; i < RL.actions.length; i++)
 		{
-			if (RL.qTable[s.ordinal()][i] >= max && RL.qTable[s.ordinal()][i] >= 0)
+			if (RL.qTable[s.ordinal()][i] >= max)
 			{
 				max = RL.qTable[s.ordinal()][i];
 				bestIndex = i;
@@ -364,23 +377,9 @@ public class FightingAI implements AIInterface {
 		return bestIndex;
 	}
 	public void close(){
-		try {
-			System.out.println("myScore:"+myScore);
-			System.out.println("opScore:"+opponentScore);
-			
-			if(myScore < opponentScore){
-				System.out.println("lose");
-				
-				pw = new PrintWriter(new BufferedWriter (new FileWriter(file)));
-				pw.close();
-			}
-			else{
-				System.out.println("win");
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		
+
 	}
 	public int getActionIndex(Action a){
 		Action[] actList = RL.actions;
@@ -418,7 +417,7 @@ public class FightingAI implements AIInterface {
 		return score;
 	}
 
-	/*private int calculateOpponentScore(int p1Hp,int p2Hp,boolean playerNumber){
+	private int calculateOpponentScore(int p1Hp,int p2Hp,boolean playerNumber){
 		int score = 0;
 		if(playerNumber){
 			if(p2Hp != 0 || p1Hp != 0)
@@ -439,7 +438,7 @@ public class FightingAI implements AIInterface {
 			}
 		}
 		return score;
-	}*/
+	}
 	
 	@Override
 	public String getCharacter() {

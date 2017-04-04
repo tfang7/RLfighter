@@ -1,8 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import enumerate.Action;
 import enumerate.State;
 
@@ -37,16 +32,16 @@ public class ReinforcementLearning {
 	public String printQ(){
 		if (this.qTable == null) return "";
 		String finalTable = "";
-		String rewardTable = "";
+		//String rewardTable = "";
 		for (int i = 0; i < State.values().length; i++)
 		{
 			for (int j = 0; j < this.actionSize; j++)
 			{
 				finalTable += (" " + qTable[i][j]);
-				rewardTable += " " + states[i].rewards[j];
+				//rewardTable += " " + states[i].rewards[j];
 			}
 			finalTable+=("\n");
-			rewardTable+=("\n");
+			//rewardTable+=("\n");
 		}
 /*		
 		System.out.println("initialized rewards:");
