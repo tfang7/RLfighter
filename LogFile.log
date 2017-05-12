@@ -1,0 +1,258 @@
+May 12, 2017 3:32:31 AM display.DisplayManager start
+INFO: Set Display Mode:960*640
+May 12, 2017 3:32:31 AM display.DisplayManager start
+INFO: Create Display
+May 12, 2017 3:32:31 AM display.DisplayManager start
+INFO: Initialize OpenGL
+May 12, 2017 3:32:31 AM game.GameState registerId
+INFO: This game state is registered as : ID 0
+May 12, 2017 3:32:31 AM game.GameManager startGame
+INFO: Start Game State at : ID 0
+May 12, 2017 3:32:32 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_NEUTRAL has been loaded.
+May 12, 2017 3:32:32 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND has been loaded.
+May 12, 2017 3:32:32 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_FORWARD_WALK has been loaded.
+May 12, 2017 3:32:32 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_DASH has been loaded.
+May 12, 2017 3:32:32 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_BACK_STEP has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CROUCH has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_JUMP has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_FOR_JUMP has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_BACK_JUMP has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_GUARD has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CROUCH_GUARD has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_GUARD has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_GUARD_RECOV has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CROUCH_GUARD_RECOV has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_GUARD_RECOV has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_RECOV has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CROUCH_RECOV has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_RECOV has been loaded.
+May 12, 2017 3:32:33 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CHANGE_DOWN has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_DOWN has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_RISE has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_LANDING has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_THROW_A has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_THROW_B has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_THROW_HIT has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_THROW_SUFFER has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_A has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_B has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CROUCH_A has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CROUCH_B has been loaded.
+May 12, 2017 3:32:34 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_A has been loaded.
+May 12, 2017 3:32:35 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_B has been loaded.
+May 12, 2017 3:32:35 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_DA has been loaded.
+May 12, 2017 3:32:35 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_DB has been loaded.
+May 12, 2017 3:32:35 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_FA has been loaded.
+May 12, 2017 3:32:35 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_FB has been loaded.
+May 12, 2017 3:32:35 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CROUCH_FA has been loaded.
+May 12, 2017 3:32:35 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_CROUCH_FB has been loaded.
+May 12, 2017 3:32:36 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_FA has been loaded.
+May 12, 2017 3:32:36 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_FB has been loaded.
+May 12, 2017 3:32:36 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_UA has been loaded.
+May 12, 2017 3:32:36 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_UB has been loaded.
+May 12, 2017 3:32:36 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_D_DF_FA has been loaded.
+May 12, 2017 3:32:36 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_D_DF_FB has been loaded.
+May 12, 2017 3:32:36 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_F_D_DFA has been loaded.
+May 12, 2017 3:32:37 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_F_D_DFB has been loaded.
+May 12, 2017 3:32:37 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_D_DB_BA has been loaded.
+May 12, 2017 3:32:37 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_D_DB_BB has been loaded.
+May 12, 2017 3:32:37 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_D_DF_FA has been loaded.
+May 12, 2017 3:32:37 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_D_DF_FB has been loaded.
+May 12, 2017 3:32:37 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_F_D_DFA has been loaded.
+May 12, 2017 3:32:37 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_F_D_DFB has been loaded.
+May 12, 2017 3:32:38 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_D_DB_BA has been loaded.
+May 12, 2017 3:32:38 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_AIR_D_DB_BB has been loaded.
+May 12, 2017 3:32:38 AM image.ImageContainer loadCharacterFile
+INFO: Image : ZEN_STAND_D_DF_FC has been loaded.
+May 12, 2017 3:32:38 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:32:38 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:32:38 AM gamestate.Play setting
+INFO: FightingAI,
+May 12, 2017 3:32:38 AM gamestate.Play setting
+INFO: Thunder01,
+May 12, 2017 3:32:38 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:32:38 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:32:39 AM game.GameState registerId
+INFO: This game state is registered as : ID 1
+May 12, 2017 3:32:39 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:34:25 AM game.GameState registerId
+INFO: This game state is registered as : ID 2
+May 12, 2017 3:34:25 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 2
+May 12, 2017 3:34:25 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:34:25 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 0
+May 12, 2017 3:34:25 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:34:25 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:34:25 AM gamestate.Play setting
+INFO: FightingAI,
+May 12, 2017 3:34:25 AM gamestate.Play setting
+INFO: Thunder01,
+May 12, 2017 3:34:25 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:34:25 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:34:26 AM game.GameState registerId
+INFO: This game state is registered as : ID 1
+May 12, 2017 3:34:26 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:36:13 AM game.GameState registerId
+INFO: This game state is registered as : ID 2
+May 12, 2017 3:36:13 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 2
+May 12, 2017 3:36:13 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:36:13 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 0
+May 12, 2017 3:36:13 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:36:13 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:36:13 AM gamestate.Play setting
+INFO: FightingAI,
+May 12, 2017 3:36:13 AM gamestate.Play setting
+INFO: Thunder01,
+May 12, 2017 3:36:13 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:36:13 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:36:13 AM game.GameState registerId
+INFO: This game state is registered as : ID 1
+May 12, 2017 3:36:13 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:37:48 AM game.GameState registerId
+INFO: This game state is registered as : ID 2
+May 12, 2017 3:37:48 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 2
+May 12, 2017 3:37:48 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:37:48 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 0
+May 12, 2017 3:37:48 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:37:48 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:37:48 AM gamestate.Play setting
+INFO: FightingAI,
+May 12, 2017 3:37:48 AM gamestate.Play setting
+INFO: Thunder01,
+May 12, 2017 3:37:48 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:37:48 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:37:48 AM game.GameState registerId
+INFO: This game state is registered as : ID 1
+May 12, 2017 3:37:48 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:39:12 AM game.GameState registerId
+INFO: This game state is registered as : ID 2
+May 12, 2017 3:39:12 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 2
+May 12, 2017 3:39:12 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:39:12 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 0
+May 12, 2017 3:39:12 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:39:12 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:39:12 AM gamestate.Play setting
+INFO: FightingAI,
+May 12, 2017 3:39:12 AM gamestate.Play setting
+INFO: Thunder01,
+May 12, 2017 3:39:12 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:39:12 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:39:12 AM game.GameState registerId
+INFO: This game state is registered as : ID 1
+May 12, 2017 3:39:12 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:40:34 AM game.GameState registerId
+INFO: This game state is registered as : ID 2
+May 12, 2017 3:40:34 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 2
+May 12, 2017 3:40:34 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
+May 12, 2017 3:40:34 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 0
+May 12, 2017 3:40:34 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:40:34 AM gamestate.Play setting
+INFO: 2,
+May 12, 2017 3:40:34 AM gamestate.Play setting
+INFO: FightingAI,
+May 12, 2017 3:40:34 AM gamestate.Play setting
+INFO: Thunder01,
+May 12, 2017 3:40:34 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:40:34 AM gamestate.Play setting
+INFO: ZEN,
+May 12, 2017 3:40:35 AM game.GameState registerId
+INFO: This game state is registered as : ID 1
+May 12, 2017 3:40:35 AM game.GameManager changeGameState
+INFO: Change Game State to : ID 1
