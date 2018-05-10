@@ -1,7 +1,7 @@
 ------------------------
 |RL Learning FightingAI|
 ------------------------
-by Tommy Fang and Corwin Aucoin
+by Tommy Fang
 
 1. How to Run
 -------------
